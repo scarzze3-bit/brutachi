@@ -1,75 +1,81 @@
-<img src="images/logo.png"/>
+# Digital Learning Platform - Sign-Up Trial & Verification Tool
 
-# Brute-Force-Login
+An automated, refreshed-session security verification and trial tool transformed specifically for **Digital Learning Platform Sign-Up Pages**.
 
-Brute Force Login in a web site with Python, hack accounts on any website with a good dictionary of words.
+## Key Features
 
+- **Refreshes After Every Trial**: Each attempt initializes a fresh session and retrieves dynamic anti-CSRF / session tokens from the target URL before posting credentials.
+- **Consistent Matching ID-to-Email**: Replaces blind Cartesian product attacks with aligned, consistent Student ID to Institutional Email pairs (via CSV, mapping files, or dynamic domain patterns).
+- **Three-Input Support**: Specifically targets `School`, `Student ID`, and `Student Email`.
+- **Intelligent Auto-Detection**: Automatically identifies input field names, forms, and hidden tokens from the target sign-up URL.
+- **Rate-Limiting & Backoff Protection**: Automatically handles HTTP 429 Too Many Requests and CAPTCHA detection with randomized delay.
+- **Detailed Audit Logging**: Outputs verified matches to `results.txt` and `results.json` with timestamps.
+- **Built-in Mock Learning Server**: Includes a local mock portal (`target_example/mock_server.py`) for offline testing and verification.
 
-**NOTE: AM NOT RESPONSIBLE OF BAD USE OF THIS PROJECT, it's only for searching purposes and learning environment!**
+---
 
-## Demo
+## Installation
 
-- **Manual-Mode (You provide fields(username/password,...), 100% accurate**)<br/>
-<img src="./images/bfl0.gif"/>
-
-<br/>
-
-- **Automatic-Mode (Auto-detect fields in the login form (username/password,...), 47% accurate)**<br/>
-<img src="./images/bfl.gif"/>
-
-
-## Features:
-
-- Perform a brute-force login on a website-target.
-- Can handle a csrf-token in a form.
-- Can Automatically detect form's fields in a given login url.
-
-## How it work ?
-
-BFL is a robot that tries to connect by exploiting the library of passwords that it has in its possession and do not stop to submit the form until it has correspondence, so you can edit the dictionary file. tx by adding your own words for a particular target!
-
-## How to Install
-
-Just hit this command to install python packages:
-```shell
-pip3 install -r requierements.txt
+```bash
+pip install -r requierements.txt
 ```
+*(Only `requests` is required. The HTML parser uses standard library Python components).*
 
-## How to use it?
+---
 
-Launch it via your command line
-```cmd
-cd C:/path/to/Brute-Force-Login
+## Usage
+
+### 1. Interactive Mode
+Run the interactive wizard:
+```bash
 python3 -m app.main
 ```
+Select **Option 1** for Automatic Form Detection, or **Option 2** for Manual Field Specification.
 
-## Target
+### 2. Command-Line (Headless) Mode
+```bash
+python3 -m app.main \
+  --url "http://127.0.0.1:8080/signup" \
+  --school "Apex High School" \
+  --school-field "school" \
+  --id-field "student_id" \
+  --email-field "email" \
+  --csrf-field "_csrf_token" \
+  --pairs-file "ressources/id_email_pairs.txt" \
+  --delay 0.5
+```
 
-The target is present at `./target` directory, it's a simple php form, when you run it, you will have this:
-<img src="images/target.png" >
+### 3. Dynamic Pattern Generation
+To automatically pair IDs with school email domains without manually creating a CSV:
+```bash
+python3 -m app.main \
+  --url "http://127.0.0.1:8080/signup" \
+  --school "Apex High School" \
+  --email-pattern "{id}@student.apex.edu"
+```
 
-### NOTE:
+---
 
-if you don't want to deploy the target locally or doesn't have PHP install localy, you can use this link to set an attack :
+## Testing with the Local Mock Server
 
-- [Target LINK](http://grabme.herokuapp.com/target/) (Where you can test your attacks)
-- Username : sanix
-- Password : .bleach1234
-- PS: on the password, don't forget the "." before b of bleach
+1. Start the mock digital learning portal:
+```bash
+python3 target_example/mock_server.py
+```
+*(Runs on `http://127.0.0.1:8080`)*
 
-## Some ressources for password list:
+2. In another terminal, run the trial tool:
+```bash
+python3 -m app.main --url "http://127.0.0.1:8080" --stop-on-match
+```
 
-- [crackstation](https://crackstation.net/crackstation-wordlist-password-cracking-dictionary.htm)
-- [insidepro](http://www.insidepro.team/)
-- [skullsecurity](https://wiki.skullsecurity.org/Passwords)
-- [danielmiessler](https://github.com/danielmiessler/SecLists/tree/master/Passwords)
-- [berzerk0](https://github.com/berzerk0/Probable-Wordlists)
-- [topics/password-cracking](https://github.com/topics/password-cracking)
+---
 
-## BONUS (A PASSWORD GENERATOR)
+## Files in `ressources/`
 
-I also created a password generator for this project named [Genesis](https://github.com/Sanix-Darker/GENESIS), that can generate multiple combination of passwords base on Key Word the victims could use, Have a look there ;-)
-
-## Author:
-
-- [Sanix-darker](https://github.com/sanix-darker)
+- `id_email_pairs.txt`: Consistent matching student ID and email pairs (`ID,Email`).
+- `schools.txt`: List of recognized school institutions.
+- `ids.txt`: List of student ID numbers.
+- `domains.txt`: School email domain suffixes.
+- `successMessage.txt`: Substrings indicating successful sign-up or verification.
+- `incorrectMessage.txt`: Substrings indicating mismatched or invalid records.

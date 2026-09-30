@@ -1,3 +1,8 @@
-error
-required error
-unrecognized
+Invalid ID or email
+ID and email do not match
+Student record not found
+School not recognized
+Account already exists
+Record mismatch
+Unauthorized student ID
+Verification failed

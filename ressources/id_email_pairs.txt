@@ -1,0 +1,10 @@
+STU-2024-001,alice.johnson@student.apex.edu
+STU-2024-002,bob.williams@student.apex.edu
+STU-2024-003,carol.davis@student.apex.edu
+STU-2024-004,david.miller@student.apex.edu
+STU-2024-005,eva.martinez@student.apex.edu
+STU-2024-006,frank.wilson@student.apex.edu
+STU-2024-007,grace.taylor@student.apex.edu
+STU-2024-008,henry.anderson@student.apex.edu
+STU-2024-009,isabella.thomas@student.apex.edu
+STU-2024-010,jack.moore@student.apex.edu
